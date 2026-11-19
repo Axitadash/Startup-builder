@@ -94,7 +94,7 @@ export default function AdminPage() {
     e.preventDefault();
     setAuthError('');
     if (adminPasscode.trim() !== 'ADMIN123') {
-      setAuthError('Invalid Master Passcode! The fixed registration passcode is "ADMIN123".');
+      setAuthError('Invalid Master Passcode. Please contact your system administrator.');
       return;
     }
     const success = adminRegister({
@@ -381,7 +381,7 @@ export default function AdminPage() {
                   <KeyRound size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#4f46e5' }} />
                   <input 
                     type="password" 
-                    placeholder="Fixed passcode: ADMIN123"
+                    placeholder="Enter master registration passcode"
                     value={adminPasscode}
                     onChange={(e) => setAdminPasscode(e.target.value)}
                     required
@@ -389,9 +389,7 @@ export default function AdminPage() {
                     style={{ paddingLeft: '2.5rem', borderColor: '#818cf8' }}
                   />
                 </div>
-                <span style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.2rem' }}>
-                  🔒 Fixed registration passcode is <strong>ADMIN123</strong>.
-                </span>
+
               </div>
 
               <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem', padding: '0.9rem', fontWeight: 700 }}>

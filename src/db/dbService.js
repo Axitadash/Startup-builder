@@ -1,6 +1,6 @@
 /**
  * VentureForge AI - Database Service Module
- * Handles full client-side & persistent relational storage for all 10 schema tables:
+ * Handles full client-side & persistent relational storage for all 11 schema tables:
  * 1. users
  * 2. projects
  * 3. project_inputs
@@ -11,6 +11,7 @@
  * 8. roadmaps
  * 9. reports
  * 10. audit_logs
+ * 11. logo_designs
  */
 
 const STORAGE_PREFIX = 'vf_db_';
@@ -288,6 +289,46 @@ export const DatabaseService = {
       logs.push(newLog);
       setTable('audit_logs', logs);
       return newLog;
+    }
+  },
+
+  // ----------------------------------------------------
+  // 11. LOGO_DESIGNS TABLE
+  // fields: id, user_id, project_id, brand_name, tagline, style, primary_color,
+  //         secondary_color, bg_color, font_family, icon_type, layout, svg_data, saved_at
+  // ----------------------------------------------------
+  logo_designs: {
+    getByUserId: (userId) => getTable('logo_designs').filter(l => l.user_id === userId),
+    getLatestByUserId: (userId) => {
+      const all = getTable('logo_designs').filter(l => l.user_id === userId);
+      return all.length > 0 ? all[all.length - 1] : null;
+    },
+    save: (logoData) => {
+      const list = getTable('logo_designs');
+      const newLogo = {
+        id: `logo_${Date.now()}`,
+        user_id: logoData.user_id || 'guest',
+        project_id: logoData.project_id || null,
+        brand_name: logoData.brand_name || 'My Brand',
+        tagline: logoData.tagline || '',
+        style: logoData.style || 'Modern',
+        primary_color: logoData.primary_color || '#4f46e5',
+        secondary_color: logoData.secondary_color || '#7c3aed',
+        bg_color: logoData.bg_color || '#ffffff',
+        font_family: logoData.font_family || 'Space Grotesk',
+        icon_type: logoData.icon_type || 'rocket',
+        layout: logoData.layout || 'icon-left',
+        svg_data: logoData.svg_data || '',
+        saved_at: new Date().toISOString()
+      };
+      list.push(newLogo);
+      setTable('logo_designs', list);
+      DatabaseService.audit_logs.log(logoData.user_id, 'LOGO_SAVED', `logo_designs:${newLogo.id}`);
+      return newLogo;
+    },
+    deleteById: (id) => {
+      const list = getTable('logo_designs').filter(l => l.id !== id);
+      setTable('logo_designs', list);
     }
   }
 };

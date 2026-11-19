@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Rocket, Sparkles, User, LogOut, Menu, X, Shield, Lightbulb, Compass, Database, MapPin } from 'lucide-react';
+import { Rocket, Sparkles, User, LogOut, Menu, X, Shield, Lightbulb, Compass, Database, MapPin, Palette } from 'lucide-react';
 
 export default function Navbar() {
   const { 
@@ -12,6 +12,7 @@ export default function Navbar() {
     loginDemoCandidate,
     setIsGetIdeasModalOpen,
     setIsMapMyIdeaModalOpen,
+    setIsBrandLogoModalOpen,
     currentRoadmap
   } = useAuth();
 
@@ -160,7 +161,7 @@ export default function Navbar() {
           )}
         </nav>
 
-        {/* Right-Side Action Controls: "GET IDEAS" Button & User Auth */}
+        {/* Right-Side Action Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           
           {/* MAP MY IDEA Button */}
@@ -186,7 +187,28 @@ export default function Navbar() {
             <span>Map My Idea</span>
           </button>
 
-          {/* Prominent GET IDEAS Right-Side Button */}
+          {/* BRAND LOGO Button */}
+          <button 
+            onClick={() => setIsBrandLogoModalOpen(true)}
+            className="btn"
+            style={{
+              background: 'linear-gradient(135deg, #7c3aed 0%, #d946ef 100%)',
+              color: '#ffffff',
+              fontWeight: 700,
+              fontSize: '0.92rem',
+              padding: '0.6rem 1.25rem',
+              borderRadius: '12px',
+              boxShadow: '0 4px 15px rgba(124, 58, 237, 0.25)',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.45rem'
+            }}
+          >
+            <Palette size={17} color="#ffffff" />
+            <span>Brand Logo</span>
+          </button>
           <button 
             onClick={() => setIsGetIdeasModalOpen(true)}
             className="btn"
@@ -286,6 +308,12 @@ export default function Navbar() {
           flexDirection: 'column',
           gap: '0.75rem'
         }}>
+          <button 
+            className="btn btn-secondary" 
+            onClick={() => { setIsBrandLogoModalOpen(true); setMobileMenuOpen(false); }}
+          >
+            <Palette size={16} color="#7c3aed" /> Create Brand Logo
+          </button>
           <button 
             className="btn" 
             onClick={() => { setIsGetIdeasModalOpen(true); setMobileMenuOpen(false); }}

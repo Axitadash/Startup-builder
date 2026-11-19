@@ -15,11 +15,12 @@ import {
   FileCode,
   Lightbulb,
   Check,
-  MapPin
+  MapPin,
+  Palette
 } from 'lucide-react';
 
 export default function HomePage() {
-  const { setIsAuthModalOpen, user, setActivePage, loginDemoCandidate, setIsGetIdeasModalOpen, setIsMapMyIdeaModalOpen } = useAuth();
+  const { setIsAuthModalOpen, user, setActivePage, loginDemoCandidate, setIsGetIdeasModalOpen, setIsMapMyIdeaModalOpen, setIsBrandLogoModalOpen } = useAuth();
   
   // Interactive Live AI Generator State (Simple & Understandable)
   const [prompt, setPrompt] = useState('AI tool that helps local bakery owners post daily recipes on WhatsApp');
@@ -145,6 +146,19 @@ export default function HomePage() {
           >
             <MapPin size={20} color="#ffffff" />
             Map My Business Idea
+            <ArrowRight size={18} />
+          </button>
+
+          <button 
+            onClick={() => setIsBrandLogoModalOpen(true)} 
+            className="btn btn-primary btn-lg"
+            style={{
+              background: 'linear-gradient(135deg, #7c3aed 0%, #d946ef 100%)',
+              boxShadow: '0 4px 20px rgba(124, 58, 237, 0.35)'
+            }}
+          >
+            <Palette size={20} color="#ffffff" />
+            Create Brand Logo
             <ArrowRight size={18} />
           </button>
           
@@ -329,6 +343,19 @@ export default function HomePage() {
             <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', lineHeight: 1.6 }}>
               Create clean 10-slide presentations and business summaries ready to show friends, clients, or partners.
             </p>
+          </div>
+
+          <div className="glass-card" style={{ cursor: 'pointer' }} onClick={() => setIsBrandLogoModalOpen(true)}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(124, 58, 237, 0.1)', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+              <Palette size={24} />
+            </div>
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#0f172a' }}>4. AI Brand Logo Studio ✨</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', lineHeight: 1.6 }}>
+              Generate a professional logo in seconds. 5 AI concepts, DIY editor, 30+ icons, colour palettes and download in PNG & SVG.
+            </p>
+            <div style={{ marginTop: '0.75rem' }}>
+              <span style={{ fontSize: '0.8rem', color: '#7c3aed', fontWeight: 700 }}>Try it free →</span>
+            </div>
           </div>
         </div>
       </section>

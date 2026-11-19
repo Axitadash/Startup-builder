@@ -11,7 +11,8 @@ import {
   ShieldCheck, 
   CheckCircle2, 
   Code,
-  Upload
+  Upload,
+  Palette
 } from 'lucide-react';
 import { GithubIcon, TwitterIcon, LinkedinIcon } from '../components/SocialIcons';
 
@@ -23,7 +24,7 @@ const PRESET_AVATARS = [
 ];
 
 export default function ProfilePage() {
-  const { user, updateProfile, setIsAuthModalOpen, loginDemoCandidate } = useAuth();
+  const { user, updateProfile, setIsAuthModalOpen, loginDemoCandidate, selectedLogoDesign, setIsBrandLogoModalOpen, setActivePage } = useAuth();
   const fileInputRef = useRef(null);
 
   const [activeTab, setActiveTab] = useState('personal'); // 'personal' | 'skills' | 'socials'
@@ -625,6 +626,66 @@ export default function ProfilePage() {
           </div>
         </div>
 
+      </div>
+
+      {/* Brand Identity Section */}
+      <div className="glass-card" style={{ padding: '2rem', background: '#ffffff', border: '1px solid #e2e8f0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem' }}>
+              <Palette size={20} color="#7c3aed" />
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>Brand Identity</h2>
+            </div>
+            <p style={{ color: '#475569', fontSize: '0.88rem', margin: 0 }}>Your saved logo design and branding assets</p>
+          </div>
+          <button
+            onClick={() => setIsBrandLogoModalOpen(true)}
+            className="btn"
+            style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #d946ef 100%)', color: '#fff', fontWeight: 700, boxShadow: '0 4px 15px rgba(124,58,237,0.25)' }}
+          >
+            <Palette size={15} /> {selectedLogoDesign ? 'Edit Logo' : 'Create Brand Logo'}
+          </button>
+        </div>
+
+        {selectedLogoDesign ? (
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            <div style={{ background: selectedLogoDesign.bg_color || '#f8fafc', borderRadius: '16px', padding: '1.5rem 2rem', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: '180px' }}>
+              <div style={{ fontFamily: selectedLogoDesign.font_family + ', sans-serif', fontWeight: 800, fontSize: '1.4rem', color: selectedLogoDesign.primary_color }}>
+                {selectedLogoDesign.brand_name}
+              </div>
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.5rem' }}>Logo Details</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.82rem', color: '#475569', fontWeight: 600 }}>Style:</span>
+                  <span style={{ fontSize: '0.82rem', background: 'rgba(124,58,237,0.1)', color: '#7c3aed', padding: '0.1rem 0.5rem', borderRadius: '99px', fontWeight: 700 }}>{selectedLogoDesign.style}</span>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.82rem', color: '#475569', fontWeight: 600 }}>Font:</span>
+                  <span style={{ fontSize: '0.82rem', color: '#0f172a', fontWeight: 700 }}>{selectedLogoDesign.font_family}</span>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.82rem', color: '#475569', fontWeight: 600 }}>Colours:</span>
+                  <div style={{ width: 16, height: 16, borderRadius: 4, background: selectedLogoDesign.primary_color }} />
+                  <div style={{ width: 16, height: 16, borderRadius: 4, background: selectedLogoDesign.secondary_color }} />
+                </div>
+              </div>
+              <button onClick={() => setActivePage('logo')} className="btn btn-secondary btn-sm" style={{ marginTop: '0.75rem', borderColor: '#7c3aed', color: '#7c3aed' }}>
+                Open Logo Studio →
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div style={{ textAlign: 'center', padding: '2.5rem 1rem', background: 'linear-gradient(135deg, rgba(124,58,237,0.04), rgba(217,70,239,0.04))', borderRadius: '16px', border: '1px dashed rgba(124,58,237,0.25)' }}>
+            <Palette size={40} color="#c084fc" style={{ margin: '0 auto 0.75rem' }} />
+            <p style={{ color: '#7c3aed', fontWeight: 700, fontSize: '1rem', margin: '0 0 0.3rem' }}>No brand logo created yet</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.88rem', margin: '0 0 1rem' }}>Generate a professional logo with AI or design your own</p>
+            <button onClick={() => setIsBrandLogoModalOpen(true)} className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #d946ef 100%)' }}>
+              <Sparkles size={15} /> Create Your Brand Logo
+            </button>
+          </div>
+        )}
       </div>
 
       <style>{`

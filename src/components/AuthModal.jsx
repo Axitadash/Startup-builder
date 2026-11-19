@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { X, Lock, Mail, User, MapPin, Rocket, ArrowRight, ShieldCheck } from 'lucide-react';
 
@@ -12,6 +12,19 @@ export default function AuthModal() {
   const [location, setLocation] = useState('');
   const [role, setRole] = useState('Technical Founder');
   const [startupName, setStartupName] = useState('');
+
+  // Reset form fields every time the modal opens
+  useEffect(() => {
+    if (isAuthModalOpen) {
+      setEmail('');
+      setPassword('');
+      setName('');
+      setLocation('');
+      setRole('Technical Founder');
+      setStartupName('');
+      setTab('login');
+    }
+  }, [isAuthModalOpen]);
 
   if (!isAuthModalOpen) return null;
 
@@ -147,7 +160,7 @@ export default function AuthModal() {
         )}
 
         {/* Auth Form */}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           {tab === 'register' && (
             <>
               <div className="form-group">
@@ -190,8 +203,10 @@ export default function AuthModal() {
             <div style={{ position: 'relative' }}>
               <Mail size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
               <input 
-                type="email" 
-                placeholder="candidate@ai-startup.io"
+                type="email"
+                name="email-login"
+                autoComplete="off"
+                placeholder="abc@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -206,7 +221,9 @@ export default function AuthModal() {
             <div style={{ position: 'relative' }}>
               <Lock size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
               <input 
-                type="password" 
+                type="password"
+                name="password-login"
+                autoComplete="new-password"
                 placeholder="••••••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

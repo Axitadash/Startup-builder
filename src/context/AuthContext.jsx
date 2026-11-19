@@ -472,15 +472,22 @@ export const AuthProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
 
-  const [activePage, setActivePage] = useState('home'); // 'home', 'about', 'contact', 'profile', 'roadmap'
+  const [activePage, setActivePage] = useState('home'); // 'home', 'about', 'contact', 'profile', 'roadmap', 'logo'
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isGetIdeasModalOpen, setIsGetIdeasModalOpen] = useState(false);
   const [isMapMyIdeaModalOpen, setIsMapMyIdeaModalOpen] = useState(false);
+  const [isBrandLogoModalOpen, setIsBrandLogoModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
   // Selected idea & roadmap state
   const [selectedIdea, setSelectedIdea] = useState(null);
   const [currentRoadmap, setCurrentRoadmap] = useState(null);
+  const [selectedLogoDesign, setSelectedLogoDesign] = useState(() => {
+    try {
+      const saved = localStorage.getItem('venture_ai_logo');
+      return saved ? JSON.parse(saved) : null;
+    } catch { return null; }
+  });
 
   useEffect(() => {
     if (user) {
@@ -773,6 +780,18 @@ export const AuthProvider = ({ children }) => {
     showToast(`Complete End-to-End Roadmap generated for "${customIdea.title}"!`);
   };
 
+  const saveLogo = (logoConfig) => {
+    const userId = user ? user.id : 'guest';
+    const saved = DatabaseService.logo_designs.save({
+      ...logoConfig,
+      user_id: userId
+    });
+    setSelectedLogoDesign(saved);
+    try { localStorage.setItem('venture_ai_logo', JSON.stringify(saved)); } catch {}
+    showToast('Brand logo saved to your profile!');
+    return saved;
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -789,10 +808,15 @@ export const AuthProvider = ({ children }) => {
       setIsGetIdeasModalOpen,
       isMapMyIdeaModalOpen,
       setIsMapMyIdeaModalOpen,
+      isBrandLogoModalOpen,
+      setIsBrandLogoModalOpen,
       selectedIdea,
       currentRoadmap,
       selectIdeaAndGenerateRoadmap,
       generateRoadmapForCustomIdea,
+      selectedLogoDesign,
+      setSelectedLogoDesign,
+      saveLogo,
       adminLogin,
       adminRegister,
       showToast,

@@ -6,13 +6,13 @@ import {
   Coins, 
   ShieldAlert, 
   Calendar, 
-  CheckCircle2, 
-  Download
+  CheckCircle2,
+  Palette
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function RoadmapPage() {
-  const { currentRoadmap, setIsGetIdeasModalOpen, showToast } = useAuth();
+  const { currentRoadmap, setIsGetIdeasModalOpen, showToast, setIsBrandLogoModalOpen, setActivePage } = useAuth();
   const [activeTab, setActiveTab] = useState('timeline'); // 'timeline' | 'budget' | 'risks'
 
   if (!currentRoadmap) {
@@ -32,10 +32,7 @@ export default function RoadmapPage() {
     );
   }
 
-  const handleExportPDF = () => {
-    confetti({ particleCount: 70, spread: 60 });
-    showToast('Exporting Complete Startup Roadmap PDF...');
-  };
+
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
@@ -67,12 +64,14 @@ export default function RoadmapPage() {
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.6rem' }}>
+          <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+            <button onClick={() => setIsBrandLogoModalOpen(true)} className="btn btn-secondary btn-sm"
+              style={{ borderColor: '#7c3aed', color: '#7c3aed', background: 'rgba(124,58,237,0.06)' }}
+            >
+              <Palette size={14} /> Create Brand Logo
+            </button>
             <button onClick={() => setIsGetIdeasModalOpen(true)} className="btn btn-secondary btn-sm">
               <Sparkles size={14} /> Change Idea
-            </button>
-            <button onClick={handleExportPDF} className="btn btn-primary btn-sm">
-              <Download size={14} /> Export Roadmap PDF
             </button>
           </div>
         </div>
@@ -152,6 +151,21 @@ export default function RoadmapPage() {
           }}
         >
           <ShieldAlert size={16} /> 3. Risk Analysis & Mitigation
+        </button>
+
+        <button
+          id="tab-brand-logo-roadmap"
+          onClick={() => setActiveTab('logo')}
+          className="btn"
+          style={{
+            flex: 1,
+            background: activeTab === 'logo' ? 'linear-gradient(135deg, #7c3aed 0%, #d946ef 100%)' : 'transparent',
+            color: activeTab === 'logo' ? '#ffffff' : '#7c3aed',
+            fontWeight: 700,
+            border: activeTab === 'logo' ? 'none' : '1px solid rgba(124,58,237,0.25)'
+          }}
+        >
+          <Palette size={16} /> 4. Create Brand Logo ✨
         </button>
       </div>
 
@@ -345,12 +359,52 @@ export default function RoadmapPage() {
         </div>
       )}
 
-      {/* Bottom CTA Actions */}
-      <div style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-        <button onClick={handleExportPDF} className="btn btn-primary btn-lg">
-          <Download size={18} /> Download Full Startup Plan PDF
-        </button>
-      </div>
+      {/* TAB 4: Brand Logo */}
+      {activeTab === 'logo' && (
+        <div className="glass-card" style={{ padding: '2.5rem 2rem', background: '#ffffff', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+          <div style={{
+            width: '72px', height: '72px', borderRadius: '20px',
+            background: 'linear-gradient(135deg, #7c3aed 0%, #d946ef 100%)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            margin: '0 auto 1.25rem',
+            boxShadow: '0 8px 25px rgba(124,58,237,0.3)'
+          }}>
+            <Palette size={36} color="#fff" />
+          </div>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.5rem' }}>
+            Create Your Brand Logo
+          </h2>
+          <p style={{ color: '#475569', fontSize: '1rem', maxWidth: '520px', margin: '0 auto 0.75rem', lineHeight: 1.6 }}>
+            Your roadmap is ready — now make your brand unforgettable. Generate a professional logo for <strong>{currentRoadmap.ideaTitle}</strong> using AI or design your own with the interactive editor.
+          </p>
+
+          <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap', margin: '1.5rem 0' }}>
+            {['5 AI Logo Concepts', 'DIY Logo Editor', '30+ Icons', '12 Color Palettes', 'PNG & SVG Download'].map(tag => (
+              <span key={tag} style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.2)', borderRadius: '99px', padding: '0.3rem 0.85rem', fontSize: '0.82rem', color: '#7c3aed', fontWeight: 700 }}>
+                ✓ {tag}
+              </span>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button
+              id="btn-open-logo-studio"
+              onClick={() => { setIsBrandLogoModalOpen(true); }}
+              className="btn btn-primary btn-lg"
+              style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #d946ef 100%)', boxShadow: '0 6px 20px rgba(124,58,237,0.35)' }}
+            >
+              <Palette size={20} /> Open Brand Logo Studio
+            </button>
+            <button
+              onClick={() => { sessionStorage.setItem('logoInitMode', 'ai'); setActivePage('logo'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              className="btn btn-secondary btn-lg"
+              style={{ borderColor: '#7c3aed', color: '#7c3aed' }}
+            >
+              <Sparkles size={18} /> AI Generate Directly
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   );
